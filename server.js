@@ -45,6 +45,7 @@ app.post("/add-to-queue", async (req, res) => {
   const queueLength = await Queue.count();
   const newCustomer = await Queue.create({ name, serving: queueLength === 0 });
   io.emit("updateQueue", await Queue.findAll());
+  io.emit("customerAdded");
   res.sendStatus(200);
 });
 
@@ -52,18 +53,17 @@ app.delete("/remove-from-queue/:index", async (req, res) => {
   const index = parseInt(req.params.index, 10);
   const queue = await Queue.findAll();
   if (index >= 0 && index < queue.length) {
+    const isCurrentlyServing = queue[index].serving;
     await queue[index].destroy();
     const updatedQueue = await Queue.findAll();
-    if (
-      updatedQueue.length > 0 &&
-      !updatedQueue.some((ticket) => ticket.serving)
-    ) {
+    if (isCurrentlyServing && updatedQueue.length > 0) {
       const firstInQueue = updatedQueue[0];
       firstInQueue.serving = true;
       await firstInQueue.save();
+      io.emit("customerIsBeingServed");
     }
+    io.emit("updateQueue", await Queue.findAll());
   }
-  io.emit("updateQueue", await Queue.findAll());
   res.sendStatus(200);
 });
 
@@ -74,8 +74,9 @@ app.post("/serve-customer/:index", async (req, res) => {
     const ticket = queue[index];
     ticket.serving = true;
     await ticket.save();
+    io.emit("updateQueue", await Queue.findAll());
+    io.emit("customerIsBeingServed");
   }
-  io.emit("updateQueue", await Queue.findAll());
   res.sendStatus(200);
 });
 
