@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <title>Login</title>
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            top: 48%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .popup button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card mt-5">
+                    <div class="card-header text-center">
+                        <img src="/assets/LexisNexis_logo.png" alt="LexisNexisLogo" class="logo">
+                        <h1>Login</h1>
+                    </div>
+                    <div class="card-body">
+                        <form id="loginForm" action="/login" method="post">
+                            <div class="form-group">
+                                <label for="username">Username:</label>
+                                <input type="text" id="username" name="username" autocomplete="off" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" id="password" name="password" autocomplete="off" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-default btn-block">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="popupMessage">
+        <p>Invalid username or password. Please try again.</p>
+        <button class="btn btn-danger" onclick="closePopup()">Close</button>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            if (username !== "customer" && username !== "admin" && password !== "customerpass" && password !== "adminpass") {
+                showPopup();
+            }
+        });
+
+        function showPopup() {
+            document.getElementById('popupMessage').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popupMessage').style.display = 'none';
+            window.location.reload();
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <footer>
+        <p>Copyright &#169 2024 Ahmed Hassan. All Rights Reserved.</p>
+    </footer>
+
+</body>
+
+</html>

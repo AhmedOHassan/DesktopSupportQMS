@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+}
+
+.container {
+    padding-top: 70px;
+}
+
+.card-header {
+    background-color: white;
+    color: black;
+}
+
+.logo {
+    width: 70%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.smaller-logo {
+    width: 20%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.medium-logo {
+    width: 50%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+h1 {
+    margin-top: 20px;
+    font-size: 30px;
+}
+
+.card-body {
+    margin: 20px 0;
+}
+
+.btn-default {
+    background-color: #ed1c24;
+    color: black;
+    margin-top: 20px;
+}
+
+.btn-default:hover {
+    background-color: darkred;
+    color: rgb(204, 203, 203);
+}
+
+.badge {
+    background-color: darkgreen;
+}
+
+footer {
+    height: 26vh;
+    color: darkgray;
+    margin: 0 1rem;
+}
+
+footer p {
+    text-align: center;
+}

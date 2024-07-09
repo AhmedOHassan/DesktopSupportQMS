@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <title>Admin</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card mt-5">
+                    <div class="card-header text-center">
+                        <img src="assets/LexisNexis_logo.png" alt="LexisNexisLogo" class="medium-logo">
+                        <h1>Admin Queue Management</h1>
+                        <a href="/display" class="btn btn-default">Display Queue</a>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <% queue.forEach((ticket, index)=> { %>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <%= index + 1 %>. <%= ticket.name %>
+                                            <div class="list-group-item-btn">
+                                                <% if (ticket.serving) { %>
+                                                    <span class="badge badge-success">Being Served</span>
+                                                    <% } else { %>
+                                                        <button class="btn  btn-success btn-sm serve-btn"
+                                                            data-index="<%= index %>">Serve</button>
+                                                        <% } %>
+                                                            <button class="btn btn-danger btn-sm remove-btn"
+                                                                data-index="<%= index %>">Remove</button>
+                                            </div>
+                                </li>
+                                <% }) %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.remove-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const index = this.getAttribute('data-index');
+                fetch(`/remove-from-queue/${index}`, {
+                    method: 'DELETE',
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    }
+                });
+            });
+        });
+
+        document.querySelectorAll('.serve-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const index = this.getAttribute('data-index');
+                fetch(`/serve-customer/${index}`, {
+                    method: 'POST',
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        socket.on('updateQueue', (queue) => {
+            const listGroup = document.querySelector('.list-group');
+            listGroup.innerHTML = '';
+            queue.forEach((ticket, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                listItem.innerHTML = `
+                    ${index + 1}. ${ticket.name}
+                    <div class="list-group-item-btn">
+                        ${ticket.serving ? '<span class="badge badge-success">Being Served</span>' : `<button class="btn btn-success btn-sm serve-btn" data-index="${index}">Serve</button>`}
+                        <button class="btn btn-danger btn-sm remove-btn" data-index="${index}">Remove</button>
+                    </div>
+                `;
+                listGroup.appendChild(listItem);
+            });
+
+            document.querySelectorAll('.remove-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const index = this.getAttribute('data-index');
+                    fetch(`/remove-from-queue/${index}`, {
+                        method: 'DELETE',
+                    }).then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+                });
+            });
+
+            document.querySelectorAll('.serve-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const index = this.getAttribute('data-index');
+                    fetch(`/serve-customer/${index}`, {
+                        method: 'POST',
+                    }).then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

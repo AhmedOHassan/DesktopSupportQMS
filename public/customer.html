@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <title>Customer</title>
+    <style>
+        .popup1 {
+            display: none;
+            position: fixed;
+            top: 48%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #c6f5d4;
+            color: #015716;
+            border-radius: 5px;
+            z-index: 1000;  
+            text-align: center;
+        }
+
+        .popup2 {
+            display: none;
+            position: fixed;
+            top: 47%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: whitesmoke;
+            color: black;
+            border: 1px solid black;
+            border-radius: 5px;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .popup1 button {
+            margin-top: 10px;
+        }
+
+        .popup2 button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card mt-5">
+                    <div class="card-header text-center">
+                        <img src="assets/LexisNexis_logo.png" alt="LexisNexisLogo" class="logo">
+                        <h1>Welcome to the Techbar</h1>
+                    </div>
+                    <div class="card-body">
+                        <form id="customer-form" method="post">
+                            <div class="form-group">
+                                <label for="name">Enter your full name:</label>
+                                <input type="text" id="name" name="name" autocomplete="off" class="form-control" maxlength="40" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ticket">Do you have a ticket?</label>
+                                <select id="ticket" name="ticket" class="form-control" required>
+                                    <option value="">Select an option</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>  
+                            <button type="submit" class="btn btn-default btn-block">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="popup1" id="popupMessage1">
+        <p>You have been added to the queue.</p>
+        <button class="btn btn-success" onclick="closePopup1()">Close</button>
+    </div>
+    <div class="popup2" id="popupMessage2">
+        <p>Please contact the customer service disk to place a ticket</p>
+        <button class="btn btn-default" onclick="closePopup2()">Close</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        document.getElementById("customer-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const name = document.getElementById("name").value;
+            const ticket = document.getElementById("ticket").value;
+
+            if (ticket === "yes") {
+                fetch("/add-to-queue", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ name: name })
+                }).then(response => {
+                    if (response.ok) {
+                        showPopup1();
+                    }
+                });
+            } else if (ticket === "no") {
+                showPopup2();
+            }
+        });
+
+        function showPopup1() {
+            document.getElementById("popupMessage1").style.display = 'block';
+        }
+
+        function closePopup1() {
+            document.getElementById("popupMessage1").style.display = 'none';
+            window.location.reload();
+        }
+
+        function showPopup2() {
+            document.getElementById("popupMessage2").style.display = 'block';
+        }
+
+        function closePopup2() {
+            document.getElementById("popupMessage2").style.display = 'none';
+            window.location.reload();
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

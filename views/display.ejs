@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <title>Queue Display</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .queue-card {
+            width: 100%;
+        }
+
+        .list-group-item {
+            font-size: 27px;
+        }
+
+        .being-served {
+            background-color: #fc565b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card queue-card">
+        <div class="card-header text-center">
+            <img src="assets/LexisNexis_logo.png" alt="LexisNexisLogo" class="smaller-logo">
+            <h1>Current Queue</h1>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <% queue.forEach((ticket, index)=> { %>
+                    <li class="list-group-item <%= ticket.serving ? 'being-served' : '' %>">
+                        <%= index + 1 %>. <%= ticket.name %>
+                                <% if (ticket.serving) { %>
+                                    <span class="badge badge-success">Being Served</span>
+                                    <% } %>
+                    </li>
+                    <% }) %>
+            </ul>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        socket.on('updateQueue', (queue) => {
+            const listGroup = document.querySelector('.list-group');
+            listGroup.innerHTML = '';
+            queue.forEach((ticket, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = `list-group-item ${ticket.serving ? 'being-served' : ''}`;
+                listItem.innerHTML = `
+                    ${index + 1}. ${ticket.name}
+                    ${ticket.serving ? '<span class="badge badge-success">Being Served</span>' : ''}
+                `;
+                listGroup.appendChild(listItem);
+            });
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
