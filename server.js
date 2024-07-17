@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
@@ -14,8 +15,14 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 
 const users = {
-  customer: { password: "customerpass", role: "customer" },
-  admin: { password: "adminpass", role: "admin" },
+  [process.env.CUSTOMER_USERNAME]: {
+    password: process.env.CUSTOMER_PASSWORD,
+    role: "customer",
+  },
+  [process.env.ADMIN_USERNAME]: {
+    password: process.env.ADMIN_PASSWORD,
+    role: "admin",
+  },
 };
 
 app.post("/login", (req, res) => {
@@ -23,11 +30,9 @@ app.post("/login", (req, res) => {
   const user = users[username];
 
   if (user && user.password === password) {
-    if (user.role === "customer") {
-      res.redirect("/customer");
-    } else if (user.role === "admin") {
-      res.redirect("/admin");
-    }
+    res.status(200).json({ role: user.role });
+  } else {
+    res.status(401).json({ message: "Unauthorized" });
   }
 });
 

@@ -12,7 +12,7 @@
         .popup {
             display: none;
             position: fixed;
-            top: 47%;
+            top: 45%;
             left: 50%;
             transform: translate(-50%, -50%);
             padding: 20px;
@@ -63,12 +63,30 @@
 
     <script>
         document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault();
             const username = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value.trim();
 
-            if (username !== "customer" && username !== "admin" && password !== "customerpass" && password !== "adminpass") {
+            fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.role === "customer") {
+                    window.location.href = "/customer";
+                } else if (data.role === "admin") {
+                    window.location.href = "/admin";
+                } else {
+                    showPopup();
+                }
+            })
+            .catch(() => {
                 showPopup();
-            }
+            });
         });
 
         function showPopup() {
