@@ -18,9 +18,17 @@ const Queue = sequelize.define("Queue", {
   },
 });
 
+const Availability = sequelize.define("Availability", {
+  isAvailable: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+});
+
 sequelize.sync();
 
 module.exports = {
   Queue,
+  Availability,
   sequelize,
 };

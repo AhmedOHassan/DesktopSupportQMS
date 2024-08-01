@@ -63,3 +63,7 @@ footer {
 footer p {
   text-align: center;
 }
+
+.form-check {
+  margin-top: 20px;
+}

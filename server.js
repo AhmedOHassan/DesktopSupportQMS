@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const http = require("http");
-const { Queue } = require("./models");
+const { Queue, Availability } = require("./models");
 const socketIo = require("socket.io");
 const app = express();
 const server = http.createServer(app);
@@ -36,13 +36,19 @@ app.post("/login", (req, res) => {
   }
 });
 
-app.get("/customer", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "customer.html"));
+app.get("/customer", async (req, res) => {
+  const availability = await Availability.findOne();
+  if (availability && !availability.isAvailable) {
+    res.sendFile(path.join(__dirname, "public", "out_of_office.html"));
+  } else {
+    res.sendFile(path.join(__dirname, "public", "customer.html"));
+  }
 });
 
 app.get("/admin", async (req, res) => {
   const queue = await Queue.findAll();
-  res.render("admin", { queue });
+  const availability = await Availability.findOne();
+  res.render("admin", { queue, isAvailable: availability ? availability.isAvailable : false });
 });
 
 app.post("/add-to-queue", async (req, res) => {
@@ -88,6 +94,34 @@ app.post("/serve-customer/:index", async (req, res) => {
 app.get("/display", async (req, res) => {
   const queue = await Queue.findAll();
   res.render("display", { queue });
+});
+
+app.get("/get-availability", async (req, res) => {
+  try {
+    const availability = await Availability.findOne();
+    res.json({ isAvailable: availability ? availability.isAvailable : false });
+  } catch (error) {
+    console.error("Error fetching availability:", error);
+    res.status(500).json({ error: "Failed to fetch availability" });
+  }
+});
+
+app.post("/set-availability", async (req, res) => {
+  const { isAvailable } = req.body;
+  try {
+    let availability = await Availability.findOne();
+    if (!availability) {
+      availability = await Availability.create({ isAvailable });
+    } else {
+      availability.isAvailable = isAvailable;
+      await availability.save();
+    }
+    io.emit("availabilityChanged", isAvailable);
+    res.status(200).send("Availability status updated successfully");
+  } catch (error) {
+    console.error("Error updating availability:", error);
+    res.status(500).json({ error: "Failed to update availability" });
+  }
 });
 
 io.on("connection", (socket) => {

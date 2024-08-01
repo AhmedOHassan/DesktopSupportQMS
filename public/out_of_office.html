@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Out of Office</title>
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <style>
+      .card-body {
+        text-align: center;
+        font-size: 22px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="card mt-5">
+            <div class="card-header text-center">
+              <img
+                src="assets/LexisNexis_logo.png"
+                alt="LexisNexisLogo"
+                class="medium-logo"
+              />
+              <h1>Techbar is currently unavailable</h1>
+            </div>
+            <div class="card-body">
+              <p> The Raleigh Desktop Support team is currently out of the office. <br></p>
+              <p> If you need help, please contact the customer service desk: <br></p>
+              <p>
+                US & Canada Toll: +1 937-865-7755 &emsp; UK/EMEA: +44 1865 843737 <br>
+                US Toll Free: +1 855-738-7365 &emsp; APAC Toll Free: +800 6349 0000 <br>
+                Email: lnservicedesk@lexisnexis.com &emsp; Web: https://reedelsevier.service-now.com/reed
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      const socket = io();
+      socket.on("availabilityChanged", function(isAvailable) {
+        window.location.reload();
+      });
+    </script>
+  </body>
+</html>

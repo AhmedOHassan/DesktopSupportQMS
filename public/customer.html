@@ -29,7 +29,7 @@
       .popup2 {
         display: none;
         position: fixed;
-        top: 45%;
+        top: 46%;
         left: 50%;
         transform: translate(-50%, -50%);
         padding: 20px;
@@ -54,13 +54,13 @@
   <body>
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-md-7">
+        <div class="col-md-10">
           <div class="card mt-5">
             <div class="card-header text-center">
               <img
                 src="assets/LexisNexis_logo.png"
                 alt="LexisNexisLogo"
-                class="logo"
+                class="medium-logo"
               />
               <h1>Welcome to the Techbar</h1>
             </div>
@@ -105,11 +105,11 @@
       <button class="btn btn-success" onclick="closePopup1()">Close</button>
     </div>
     <div class="popup2" id="popupMessage2">
+      <p> Please contact the customer service desk to place a ticket: <br></p>
       <p>
-        Please contact the customer service disk to place a ticket: <br>
-        US & Canada Toll: +1 937-865-7755    UK/EMEA: +44 1865 843737 <br>
-        US Toll Free: +1 855-738-7365        APAC Toll Free: +800 6349 0000 <br>
-        Email: lnservicedesk@lexisnexis.com  Web: https://reedelsevier.service-now.com/reed
+        US & Canada Toll: +1 937-865-7755 &emsp; UK/EMEA: +44 1865 843737 <br>
+        US Toll Free: +1 855-738-7365 &emsp; APAC Toll Free: +800 6349 0000 <br>
+        Email: lnservicedesk@lexisnexis.com &emsp; Web: https://reedelsevier.service-now.com/reed
       </p>
       <button class="btn btn-default" onclick="closePopup2()">Close</button>
     </div>
@@ -157,6 +157,11 @@
         document.getElementById("popupMessage2").style.display = "none";
         window.location.reload();
       }
+
+      const socket = io();
+      socket.on("availabilityChanged", function(isAvailable) {
+        window.location.reload();
+      });
     </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
