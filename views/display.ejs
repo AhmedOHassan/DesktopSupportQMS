@@ -59,12 +59,14 @@
 
     <audio id="queueSound" src="assets/inQueue.wav"></audio>
     <audio id="servedSound" src="assets/beingServed.wav"></audio>
+    <audio id="removedSound" src="assets/removed.wav"></audio>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
       const queueSound = document.getElementById("queueSound");
       const serveSound = document.getElementById("servedSound");
+      const removeSound = document.getElementById("removedSound");
       socket.on("updateQueue", (queue) => {
         const listGroup = document.querySelector(".list-group");
         listGroup.innerHTML = "";
@@ -91,6 +93,10 @@
 
       socket.on("customerIsBeingServed", () => {
         serveSound.play();
+      });
+
+      socket.on("customerRemoved", () => {
+        removeSound.play();
       });
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

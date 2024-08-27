@@ -48,7 +48,10 @@ app.get("/customer", async (req, res) => {
 app.get("/admin", async (req, res) => {
   const queue = await Queue.findAll();
   const availability = await Availability.findOne();
-  res.render("admin", { queue, isAvailable: availability ? availability.isAvailable : false });
+  res.render("admin", {
+    queue,
+    isAvailable: availability ? availability.isAvailable : false,
+  });
 });
 
 app.post("/add-to-queue", async (req, res) => {
@@ -74,6 +77,7 @@ app.delete("/remove-from-queue/:index", async (req, res) => {
       io.emit("customerIsBeingServed");
     }
     io.emit("updateQueue", await Queue.findAll());
+    io.emit("customerRemoved");
   }
   res.sendStatus(200);
 });
