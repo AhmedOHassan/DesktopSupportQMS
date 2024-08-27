@@ -25,7 +25,16 @@ const Availability = sequelize.define("Availability", {
   },
 });
 
-sequelize.sync();
+sequelize.sync().then(async () => {
+  // Check if any rows exist in the Availability table
+  const availabilityCount = await Availability.count();
+
+  if (availabilityCount === 0) {
+    // No rows exist, so create a default row
+    await Availability.create({ isAvailable: true });
+    console.log("Default availability created.");
+  }
+});
 
 module.exports = {
   Queue,
