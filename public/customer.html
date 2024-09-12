@@ -14,7 +14,7 @@
       .popup1 {
         display: none;
         position: fixed;
-        top: 56%;
+        top: 55%;
         left: 50%;
         transform: translate(-50%, -50%);
         padding: 20px;
@@ -29,7 +29,7 @@
       .popup2 {
         display: none;
         position: fixed;
-        top: 56%;
+        top: 48%;
         left: 50%;
         transform: translate(-50%, -50%);
         padding: 20px;
@@ -55,7 +55,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-19">
-          <div class="card mt-4">
+          <div class="card mt-10">
             <div class="card-header text-center">
               <img
                 src="assets/LexisNexis_logo.png"
@@ -109,7 +109,10 @@
                       maxlength="20"
                       required
                     />
-                    <div id="ticket-number-error" style="color: red; display: none">
+                    <div
+                      id="ticket-number-error"
+                      style="color: red; display: none"
+                    >
                       Please enter a correct ticket number.
                     </div>
                   </div>
@@ -123,6 +126,7 @@
         </div>
       </div>
     </div>
+    <div id="overlay" style="display: none"></div>
     <div class="popup1" id="popupMessage1">
       <p>You have been added to the queue.</p>
       <button class="btn btn-success" onclick="closePopup1()">Close</button>
@@ -155,7 +159,13 @@
           // Check if the user given ticket number is valid.
           const isTicketNumberValid = validateTicketNumber(ticketNumber);
 
-          if (ticket === "yes" && name && ticketNumber && isNameValid && isTicketNumberValid) {
+          if (
+            ticket === "yes" &&
+            name &&
+            ticketNumber &&
+            isNameValid &&
+            isTicketNumberValid
+          ) {
             fetch("/add-to-queue", {
               method: "POST",
               headers: {
@@ -207,7 +217,9 @@
 
       function validateTicketNumber(ticketNumber) {
         const ticketNumberInput = ticketNumber.trim();
-        const ticketNumberError = document.getElementById("ticket-number-error");
+        const ticketNumberError = document.getElementById(
+          "ticket-number-error"
+        );
 
         // A variable to check if the given ticket number contains chars or no chars at the beginning then numbers.
         const ticketNumberPattern = /^[a-zA-Z]*[ ]*[0-9]+$/;
@@ -223,19 +235,23 @@
 
       function showPopup1() {
         document.getElementById("popupMessage1").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
       }
 
       function closePopup1() {
         document.getElementById("popupMessage1").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
         window.location.reload();
       }
 
       function showPopup2() {
         document.getElementById("popupMessage2").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
       }
 
       function closePopup2() {
         document.getElementById("popupMessage2").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
         window.location.reload();
       }
 
