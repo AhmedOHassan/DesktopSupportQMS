@@ -5,13 +5,13 @@ This project is a web-based application designed for managing queues for the Dek
 
 ## Features
 - **Login Page:** Authenticate users and direct them to the appropriate interface based on their role. Admins access the queue management system, while customers proceed to submit their requests.<br/>
-  ![Screenshot 2024-08-22 114440](https://github.com/user-attachments/assets/a16bd23c-5cc2-4d61-bd2f-cc4b8a432145)
+  ![Screenshot 2024-08-22 114440](https://github.com/user-attachments/assets/e0f4485f-d1e8-44d4-bbe4-71a9d4c2dd2b)
 - **Customer Interface:** Submit requests, choose ticket options, and receive appropriate messages.<br/>
   ![Screenshot 2024-08-22 114556](https://github.com/user-attachments/assets/489cb9c0-8d24-469c-a043-ab9015a39ca3)
 - **Admin Interface:** Manage the queue, mark tickets as being served, remove tickets, and Toggle their availability.<br/>
-  ![Screenshot 2024-08-22 114418](https://github.com/user-attachments/assets/d676f917-5b18-432b-a3eb-421aa4e2626e)
+  ![Screenshot 2024-08-22 114418](https://github.com/user-attachments/assets/d0317e7a-74d4-4999-a31c-c899f3ea2127)
 - **Display Interface:** Display the customers who are currently in the queue.<br/>
-  ![Screenshot 2024-08-22 114518](https://github.com/user-attachments/assets/80c13a4c-8839-4359-b1b0-9c608cb043ef)
+  ![Screenshot 2024-08-22 114518](https://github.com/user-attachments/assets/d54817f8-ce49-4846-91f5-d45fa467f3f9)
 
 ## Technologies Used
 - Node.js
