@@ -16,6 +16,10 @@ const Queue = sequelize.define("Queue", {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+  ticketNumber: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
 });
 
 const Availability = sequelize.define("Availability", {

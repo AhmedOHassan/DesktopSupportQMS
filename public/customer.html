@@ -67,33 +67,49 @@
             <div class="card-body">
               <form id="customer-form" method="post">
                 <div class="form-group">
-                  <label for="name">Enter your full name:</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    autocomplete="off"
-                    class="form-control"
-                    maxlength="40"
-                    required
-                  />
-                </div>
-                <div class="form-group">
                   <label for="ticket">Do you have a ticket?</label>
                   <select
                     id="ticket"
                     name="ticket"
                     class="form-control"
                     required
+                    onchange="toggleTicketDetails()"
                   >
                     <option value="">Select an option</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                   </select>
                 </div>
-                <button type="submit" class="btn btn-default btn-block">
-                  Submit
-                </button>
+                <!-- This section will appear only if "Yes" is selected -->
+                <div id="ticket-details" style="display: none">
+                  <div class="form-group">
+                    <label for="name">Enter your full name:</label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      autocomplete="off"
+                      class="form-control"
+                      maxlength="40"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="ticket-number">Enter your ticket number:</label>
+                    <input
+                      type="text"
+                      id="ticket-number"
+                      name="ticket-number"
+                      autocomplete="off"
+                      class="form-control"
+                      maxlength="20"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-default btn-block">
+                    Submit
+                  </button>
+                </div>
               </form>
             </div>
           </div>
@@ -124,14 +140,15 @@
           event.preventDefault();
           const name = document.getElementById("name").value;
           const ticket = document.getElementById("ticket").value;
+          const ticketNumber = document.getElementById("ticket-number").value;
 
-          if (ticket === "yes") {
+          if (ticket === "yes" && name && ticketNumber) {
             fetch("/add-to-queue", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ name: name }),
+              body: JSON.stringify({ name: name, ticketNumber: ticketNumber }),
             }).then((response) => {
               if (response.ok) {
                 showPopup1();
@@ -140,9 +157,24 @@
             });
           } else if (ticket === "no") {
             showPopup2();
-            setTimeout(closePopup2, 10000);
+            setTimeout(closePopup2, 30000);
           }
         });
+
+      function toggleTicketDetails() {
+        const ticket = document.getElementById("ticket").value;
+        const ticketDetails = document.getElementById("ticket-details");
+
+        if (ticket === "yes") {
+          ticketDetails.style.display = "block";
+        } else if (ticket === "no") {
+          ticketDetails.style.display = "none";
+          showPopup2();
+          setTimeout(closePopup2, 30000);
+        } else {
+          ticketDetails.style.display = "none";
+        }
+      }
 
       function showPopup1() {
         document.getElementById("popupMessage1").style.display = "block";
