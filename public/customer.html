@@ -105,11 +105,13 @@
       <button class="btn btn-success" onclick="closePopup1()">Close</button>
     </div>
     <div class="popup2" id="popupMessage2">
-      <p> Please contact the customer service desk to place a ticket: <br></p>
+      <p>Please contact the customer service desk to place a ticket: <br /></p>
       <p>
-        US & Canada Toll: +1 937-865-7755 &emsp; UK/EMEA: +44 1865 843737 <br>
-        US Toll Free: +1 855-738-7365 &emsp; APAC Toll Free: +800 6349 0000 <br>
-        Email: lnservicedesk@lexisnexis.com &emsp; Web: https://reedelsevier.service-now.com/reed
+        US & Canada Toll: +1 937-865-7755 &emsp; UK/EMEA: +44 1865 843737 <br />
+        US Toll Free: +1 855-738-7365 &emsp; APAC Toll Free: +800 6349 0000
+        <br />
+        Email: lnservicedesk@lexisnexis.com &emsp; Web:
+        https://reedelsevier.service-now.com/reed
       </p>
       <button class="btn btn-default" onclick="closePopup2()">Close</button>
     </div>
@@ -133,10 +135,12 @@
             }).then((response) => {
               if (response.ok) {
                 showPopup1();
+                setTimeout(closePopup1, 10000);
               }
             });
           } else if (ticket === "no") {
             showPopup2();
+            setTimeout(closePopup2, 10000);
           }
         });
 
@@ -159,7 +163,7 @@
       }
 
       const socket = io();
-      socket.on("availabilityChanged", function(isAvailable) {
+      socket.on("availabilityChanged", function (isAvailable) {
         window.location.reload();
       });
     </script>

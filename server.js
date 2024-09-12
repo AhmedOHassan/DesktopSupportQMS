@@ -56,8 +56,7 @@ app.get("/admin", async (req, res) => {
 
 app.post("/add-to-queue", async (req, res) => {
   const { name } = req.body;
-  const queueLength = await Queue.count();
-  const newCustomer = await Queue.create({ name, serving: queueLength === 0 });
+  const newCustomer = await Queue.create({ name, serving: false });
   io.emit("updateQueue", await Queue.findAll());
   io.emit("customerAdded");
   res.sendStatus(200);
@@ -67,15 +66,7 @@ app.delete("/remove-from-queue/:index", async (req, res) => {
   const index = parseInt(req.params.index, 10);
   const queue = await Queue.findAll();
   if (index >= 0 && index < queue.length) {
-    const isCurrentlyServing = queue[index].serving;
     await queue[index].destroy();
-    const updatedQueue = await Queue.findAll();
-    if (isCurrentlyServing && updatedQueue.length > 0) {
-      const firstInQueue = updatedQueue[0];
-      firstInQueue.serving = true;
-      await firstInQueue.save();
-      io.emit("customerIsBeingServed");
-    }
     io.emit("updateQueue", await Queue.findAll());
   }
   res.sendStatus(200);
