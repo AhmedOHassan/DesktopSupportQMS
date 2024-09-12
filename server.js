@@ -77,7 +77,6 @@ app.delete("/remove-from-queue/:index", async (req, res) => {
       io.emit("customerIsBeingServed");
     }
     io.emit("updateQueue", await Queue.findAll());
-    io.emit("customerRemoved");
   }
   res.sendStatus(200);
 });
