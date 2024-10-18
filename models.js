@@ -1,11 +1,14 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
-const sequelize = new Sequelize(
-  process.env.DATABASE_URL || {
-    dialect: "sqlite",
-    storage: "./database.sqlite",
-  }
-);
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  protocol: 'postgres',
+  dialectOptions: {
+    ssl: {
+      require: true,
+    },
+  },
+});
 
 const Queue = sequelize.define("Queue", {
   name: {
