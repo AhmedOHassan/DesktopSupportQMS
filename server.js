@@ -46,7 +46,9 @@ app.get("/customer", async (req, res) => {
 });
 
 app.get("/admin", async (req, res) => {
-  const queue = await Queue.findAll();
+  const queue = await Queue.findAll({
+    order: [['createdAt', 'ASC']]
+  });
   const availability = await Availability.findOne();
   res.render("admin", {
     queue,
@@ -64,7 +66,9 @@ app.post("/add-to-queue", async (req, res) => {
 
 app.delete("/remove-from-queue/:index", async (req, res) => {
   const index = parseInt(req.params.index, 10);
-  const queue = await Queue.findAll();
+  const queue = await Queue.findAll({
+    order: [['createdAt', 'ASC']]
+  });
   if (index >= 0 && index < queue.length) {
     await queue[index].destroy();
     io.emit("updateQueue", await Queue.findAll());
@@ -74,7 +78,9 @@ app.delete("/remove-from-queue/:index", async (req, res) => {
 
 app.post("/serve-customer/:index", async (req, res) => {
   const index = parseInt(req.params.index, 10);
-  const queue = await Queue.findAll();
+  const queue = await Queue.findAll({
+    order: [['createdAt', 'ASC']]
+  });
   if (index >= 0 && index < queue.length) {
     const ticket = queue[index];
     ticket.serving = true;
@@ -86,7 +92,9 @@ app.post("/serve-customer/:index", async (req, res) => {
 });
 
 app.get("/display", async (req, res) => {
-  const queue = await Queue.findAll();
+  const queue = await Queue.findAll({
+    order: [['createdAt', 'ASC']]
+  });
   res.render("display", { queue });
 });
 
