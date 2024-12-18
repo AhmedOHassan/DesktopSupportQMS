@@ -56,7 +56,11 @@ app.get("/admin", async (req, res) => {
 
 app.post("/add-to-queue", async (req, res) => {
   const { name, ticketNumber } = req.body;
-  const newCustomer = await Queue.create({ name, serving: false, ticketNumber: ticketNumber });
+  const newCustomer = await Queue.create({
+    name,
+    serving: false,
+    ticketNumber: ticketNumber,
+  });
   io.emit("updateQueue", await Queue.findAll());
   io.emit("customerAdded");
   res.sendStatus(200);
